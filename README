@@ -1,0 +1,4 @@
+Files:
+  syntax/
+    scheme.vim      syntax highlighting for R6RS Scheme and Guile
+
