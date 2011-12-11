@@ -1,3 +1,8 @@
+" Vim syntax file
+" Language:	Scheme R6RS (including libraries) + Guile (some reader extensions, complete API)
+" Last Change:	2011-12-11
+" Maintainer:	Tobias Brandt <tob.brandt@gmail.com>
+
 if version < 600
   syntax clear
 elseif exists("b:current_syntax")
