@@ -26,6 +26,7 @@ syn match schemeWhiteSpace ![ \t\r\n\v\f]*! contained
 syn match schemeDelimiter ![()\[\];".]!
 syn match schemeKeyword ![#]!
 
+
 " LEXEMES
 " =============================================================================
 
@@ -89,9 +90,12 @@ syn match schemeDatumComment ,#;[ \t\n\r\v\f]*\%(#\\.\|#\\\%(nul\|alarm\|backspa
 " #; string
 syn region schemeDatumComment start=!#;[ \t\n\r\f\v]*\%(\%(#\?\%([`',]\|,@\)\)[ \t\r\n\f\v]*\)*"! end=,", skip=,\\",
 
+syn region commentedSchemeStructure start='(' end=')' contained
+syn region commentedSchemeStructure start='\[' end='\]' contained
+
 " #; (...) or #; [...] with optional # or #vu8 in front
-syn region schemeDatumComment start=!#;[ \t\n\r\f\v]*\%(\%(#\?\%([`',]\|,@\)\)[ \t\r\n\f\v]*\)*\%(#\%(vu8\)\?\)\?(! end=,),
-syn region schemeDatumComment start=!#;[ \t\n\r\f\v]*\%(\%(#\?\%([`',]\|,@\)\)[ \t\r\n\f\v]*\)*\%(#\%(vu8\)\?\)\?\[! end=,\],
+syn region schemeDatumComment start=!#;[ \t\n\r\f\v]*\%(\%(#\?\%([`',]\|,@\)\)[ \t\r\n\f\v]*\)*\%(#\%(vu8\)\?\)\?(! end=,), contains=commentedSchemeStructure
+syn region schemeDatumComment start=!#;[ \t\n\r\f\v]*\%(\%(#\?\%([`',]\|,@\)\)[ \t\r\n\f\v]*\)*\%(#\%(vu8\)\?\)\?\[! end=,\], contains=commentedSchemeStructure
 
 " STRUCTURE
 " =============================================================================
@@ -455,6 +459,8 @@ syn match guileKeyword ,\<sxml-match\%(-let\*\?\)\?\>,
 
 "==============================================================================
 
+syn sync match matchPlace grouphere NONE "^[^ \t]"
+
 " Define the default highlighting.
 " For version 5.7 and earlier: only when not done already
 " For version 5.8 and later: only when an item doesn't have highlighting yet
@@ -471,6 +477,7 @@ if version >= 508 || !exists("did_scheme_syntax_inits")
   HiLink schemeSpecialComment Comment
   HiLink schemeDatumComment Comment
   HiLink guileComment Comment
+  HiLink commentedSchemeStructure Comment
 
   HiLink schemeInlineHexEscape SpecialChar
   HiLink schemeEscapedChar SpecialChar
