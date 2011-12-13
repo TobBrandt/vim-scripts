@@ -305,7 +305,7 @@ syn keyword guileProc object->string make-object-property object-properties set-
 syn keyword guileKeyword define-once
 syn keyword guileProc defined?
 " control
-syn keyword guileProc break continue guileProc call-with-prompt make-prompt-tag default-prompt-tag abort-to-promp abort reset shift call-with-current-continuation call/cc values call-with-values receive catch with-throw-handler throw error scm-error strerror dynamic-wind display-error with-continuation-barrier
+syn keyword guileProc while break continue guileProc call-with-prompt make-prompt-tag default-prompt-tag abort-to-promp abort reset shift call-with-current-continuation call/cc values call-with-values receive catch with-throw-handler throw error scm-error strerror dynamic-wind display-error with-continuation-barrier
 syn keyword guileKeyword false-if-exception
 syn keyword schemeOperator %
 syn keyword guileErrorKey error-signal system-error numerical-overflow out-of-range wrong-type-arg wrong-number-of-args memory-allocation-error stack-overflow regular-expression-syntax misc-error
