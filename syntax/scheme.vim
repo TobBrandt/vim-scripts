@@ -90,8 +90,8 @@ syn match schemeDatumComment ,#;[ \t\n\r\v\f]*\%(#\\.\|#\\\%(nul\|alarm\|backspa
 " #; string
 syn region schemeDatumComment start=!#;[ \t\n\r\f\v]*\%(\%(#\?\%([`',]\|,@\)\)[ \t\r\n\f\v]*\)*"! end=,", skip=,\\",
 
-syn region commentedSchemeStructure start='(' end=')' contained
-syn region commentedSchemeStructure start='\[' end='\]' contained
+syn region commentedSchemeStructure start='(' end=')' contained contains=commentedSchemeStructure
+syn region commentedSchemeStructure start='\[' end='\]' contained contains=commentedSchemeStructure
 
 " #; (...) or #; [...] with optional # or #vu8 in front
 syn region schemeDatumComment start=!#;[ \t\n\r\f\v]*\%(\%(#\?\%([`',]\|,@\)\)[ \t\r\n\f\v]*\)*\%(#\%(vu8\)\?\)\?(! end=,), contains=commentedSchemeStructure
@@ -146,7 +146,7 @@ syn keyword schemeProc number->string string->number
 " 11.8
 syn keyword schemeProc not boolean? boolean=? 
 " 11.9
-syn keyword schemeProc pair? cons car cdr caar cadr cdar cddr caaar caadr cadar cdaar caddr cdadr cddar cdddr caaaar caaadr caadar cadaar cdaaar caaddr cadadr caddar cdaadr cdadar cddaar cadddr cdaddr cddadr cdddar cddddr null? list? list length append reverse list-tail list-ref map for-each 
+syn keyword schemeProc pair? cons car cdr caar cadr cdar cddr caaar caadr cadar cdaar caddr cdadr cddar cdddr caaaar caaadr caadar cadaar cdaaar caaddr cadadr caddar cdaadr cdadar cddaar cadddr cdaddr cddadr cdddar cddddr null? list? list length append append! reverse reverse! list-tail list-ref map for-each 
 " 11.10
 syn keyword schemeProc symbol? symbol->string symbol=? string->symbol 
 " 11.11
@@ -259,100 +259,178 @@ syn region guileComment start=,#!\%(r6rs\)\@!, end=,!#,
 syn match schemeSpecialCommentR6RS ,#!r6rs,
 
 
+
 " GOOPS
 " =============================================================================
 
 syn keyword guileKeyword define-class define-method define-generic define-accessor class method 
 syn keyword guileProc make make-instance enable-primitive-generic! primitive-generic-generic next-method no-method no-applicable-method no-next-method class-name class-direct-supers class-direct-slots class-direct-subclasses class-direct-methods class-precedence-list class-slots class-subclasses class-methods class-of instance? is-a? class-slot-definition slot-definition-name slot-definition-options slot-definition-allocation slot-definition-getter slot-definition-setter slot-definition-accessor slot-definition-init-value slot-definition-init-form slot-definition-init-thunk slot-definition-init-keyword slot-init-function generic-function-name generic-function-methods method-generic-function method-specializers method-procedure method-source slot-exists? slot-bound? slot-ref slot-set! slot-exists-using-class? slot-bound-using-class? slot-ref-using-class slot-set-using-class! class-slot-ref class-slot-set! slot-missing slot-unbound goops-error shallow-clone deep-clone write display make-class ensure-metaclass compute-std-cpl make-method add-method! ensure-generic make-generic ensure-accessor make-accessor class-redefinition remove-class-accessors! update-direct-method! update-direct-subclass! change-class update-instance-for-different-class 
 
-" GUILE MODULE SYSTEM
+" GUILE API     (many of these are duplicates of the rnrs keywords)
 " =============================================================================
 
-syn keyword guileKeyword use-modules use-syntax define-module export define-public re-export 
-syn keyword schemeOperator @ @@ 
-syn keyword guileProc symbol-prefix-proc current-module set-current-module save-module-excursion resolve-module resolve-interface module-use! reload-module 
+" booleans and numbers
+syn keyword guileProc not boolean? number? integer? real? rational? rationalize inf? nan? finite? nan inf numerator denominator complex? exact? inexact? inexact->exact exact->inexact odd? even? quotient remainder modulo gcd lcm modulo-expt exact-integer-sqrt zero? positive? negative? number->string string->number make-rectangular make-polar real-part imag-part magnitude angle 1+ 1- abs max min truncate round floor ceiling euclidean/ euclidean-quotient euclidean-remainder floor/ floor-quotient floor-remainder ceiling/ ceiling-quotient ceiling-remainder truncate/ truncate-quotient  truncate-remainder centered/ centered-quotient centered-remainder round/ round-quotient round-remainder logand logior logxor lognot logtest logbit? ash logcount integer-length integer-expt bit-extract copy-random-state seed->random-state datum->random-state random-state->datum
+syn match guileProc ,\<random\%(:\%(exp\|hollow-sphere!\|normal\|normal-vector!\|solid-sphere!\|uniform\)\)\?\>,
+syn keyword guileOperator = < > <= >= + - * / sqrt expt sin cos tan asin acos atan exp log log10 sinh cosh tanh asinh acosh atanh
+syn keyword guileGlobalVar *random-state*
 
-" GUILE API
-" =============================================================================
+" characters and character sets
+syn keyword guileProc char? char->integer integer->char end-of-char-set? ->char-set %char-set-dump
+syn match guileProc ,\<char\%(-ci\)\?\%(=\|<\|<=\|>\|>=\)?\>,
+syn match guileProc ,\<char-\%(alphabetic\|numeric\|whitespace\|upper-case\|lower-case\|is-both\)?\>,
+syn match guileProc ,\<char-\%(general-category\|upcase\|downcase\|titlecase\)\>,
+syn match guileProc ,\<char-set\%(?\|=\|<=\)\?\>,
+syn match guileProc ,\<char-set-\%(hash\|cursor\|ref\|cursor-next\|fold\|unfold!\?\|for-each\|map\|copy\|filter!\?\|size\|count\|contains?\|every\|any\|adjoin!\?\|delete!\?\|complement!\?\|union!\?\|intersection!\?\|difference!\?\|xor!\?\|diff+intersection!\?\|\)\>,
+syn match guileProc ,\<\%(list\|string\|ucs-range\)->char-set!\?\>,
+syn match guileProc ,\<char-set->\%(list\|string\)\>,
+syn match guileConstant ,\<char-set:\%(lower-case\|upper-case\|title-case\|letter\|digit\|letter+digit\|graphic\|printing\|whitespace\|blank\|iso-control\|punctuation\|symbol\|hex-digit\|ascii\|empty\|designated\|full\)\>,
 
-" optargs
-syn keyword guileKeyword lambda* define*
-" arrays TODO: reader syntax extension
-syn keyword guileProc array? typed-array? make-array make-typed-array list->array array-type array-ref array-in-bounds? array-set! array-shape array-rank array->list array-copy! array-fill! array-equal? array-map! array-map-in-order! array-for-each array-index-map! uniform-array-read! uniform-array-write make-shared-array shared-array-increments shared-array-offset shared-array-root array-contents transpose-array 
+" strings
+syn keyword guileProc string? string list->string reverse-list->string make-string substring xsubstring %string-dump
+syn match guileProc ,\<string-\%(null?\|any\|every\|tabulate\|join\|>list\|split\|length\|ref\|copy\|take\|drop\|take-right\|drop-right\|pad\|pad-right\|trim\|trim-right\|trim-both\|set!\|fill!\|compare\|compare-ci\|hash\|hash-ci\|normalize-\%(nfd\|nfkd\|nfc\|nfkc\)\|index\|rindex\|\%(prefix\|suffix\)\%(-length\%(-ci\)\?\|\%(-ci\)\??\)\|index-right\|skip\|skip-right\|count\|contains\%(-ci\)\?\|upcase!\?\|downcase!\?\|capitalize!\?\|titlecase!\?\|reverse!\?\|append\|append/shared\|concatenate\|concatenate-reverse\|concatenate/shared\|concatenate-reverse/shared\|map!\?\|for-each\|for-each-index\|fold\|fold-right\|unfold\|unfold-right\|xcopy!\|replace\|tokenize\|filter\|delete\|bytes-per-char\)\>,
+syn match guileProc ,\<substring/\%(shared\|copy\|read-only\)\>,
+syn match guileProc ,\<substring-\%(fill!\|move!\|copy!\)\>,
+syn match guileProc ,\<string\%(-ci\)\?\%(=\|<\|<=\|>\|>=\)?\>,
+syn match guileProc ,\<string\%(-ci\)\?\%(=\|<>\|<\|>\|<=\|>=\)\>,
+
+" bytevectors
+syn keyword guileProc native-endianness make-bytevector bytevector? bytevector=?
+syn keyword guileKeyword endianness
+syn match guileProc ,\<bytevector-\%(length\|fill!\|copy!\?\)\>,
+syn match guileProc ,\<bytevector-\%(u\|s\)\%(int\|8\|16\|32\|64\)-\%(native-\)\?\%(ref\|set!\)\>,
+syn match guileProc ,\<bytevector->\%(u8\|uint\|sint\)-list\>,
+syn match guileProc ,\<\%(u8\|uint\|sint\)-list->bytevector\>,
+syn match guileProc ,\<bytevector-ieee-\%(single\|double\)-\%(native-\)\?\%(ref\|set!\)\>,
+syn match guileProc ,\<string->utf\%(8\|16\|32\)\>,
+syn match guileProc ,\<utf\%(8\|16\|32\)->string\>,
+
+" symbols and keywords
+syn keyword guileProc symbol? symbol list->symbol string->symbol string-ci->symbol gensym set-symbol-property! symbol-property-remove! make-symbol keyword? keyword->symbol
+syn match guileProc ,\<symbol-\%(hash\|>string\|append\|fref\|fset!\|pref\|pset!\|property\|interned?\|>keyword\)\>,
+
+" pairs and lists
+syn keyword guileProc cons pair? set-car! set-cdr! list? null? list cons* make-list length last-pair append append! reverse reverse! delq delv delete delq! delv! delete delq! delv! delete1! filter filter! memq memv member map map-in-order for-each
+syn match guileProc !\<c[ad]\{1,4}r\>!
+syn match guileProc ,\<list-\%(copy\|ref\|tail\|cdr-ref\|head\|set!\|cdr-set!\)\>,
+
+" vectors
+syn keyword guileProc vector list->vector make-vector vector?
+syn match guileProc ,\<vector-\%(>list\|length\|ref\|set!\|fill!\|copy\|move-left!\|move-right!\)\>,
+
 " bitvectors
 syn keyword guileProc bitvector? make-bitvector bitvector bitvector-length bitvector-ref bitvector-set! bitvector-fill! list->bitvector bitvector->list bit-count bit-position bit-invert! bit-set*! bit-count*
+
 " generalized vectors
 syn keyword guileProc generalized-vector? generalized-vector-length generalized-vector-ref generalized-vector-set! generalized-vector->list 
-" vlists
-syn keyword guileProc vlist? vlist-null vlist-null? vlist-cons vlist-head vlist-tail vlist-fold vlist-fold-right vlist-ref vlist-length vlist-reverse vlist-map vlist-for-each vlist-drop vlist-take vlist-filter vlist-delete vlist-unfold vlist-append vlist-unfold-right list->vlist vlist->list
-syn keyword schemeGlobalVar block-growth-factor
-" structures
-syn keyword guileProc make-vtable make-struct struct? struct-ref struct-set! struct-vtable struct-vtable? vtable-index-layout vtable-index-vtable vtable-index-printer struct-vtable-name set-struct-vtable-name! struct-vtable-tag make-vtable-vtable make-struct-layout vtable-offset-user 
-" vhashes
-syn keyword guileProc vhash? vhash-cons vhash-consq vhash-consv vhash-assoc vhash-assq vhash-assv vhash-delete vhash-delq vhash-delv vhash-fold vhash-fold-right vhash-fold* vhash-foldq* vhash-foldv* alist->vhash 
-" alists
-syn keyword guileProc acons assq-set! assv-set! assoc-set! assq assv assoc assq-ref assv-ref assoc-ref assq-remove! assv-remove! assoc-remove! sloppy-assq sloppy-assv sloppy-assoc 
-" hash tables
-syn keyword guileProc make-hash-table hash-table? hash-clear! hash-ref hashq-ref hashv-ref hashx-ref hash-set! hashq-set! hashv-set! hashx-set! hash-remove! hashq-remove! hashv-remove! hashx-remove! hash hashq hashv hash-get-handle hashq-get-handle hashv-get-handle hashx-get-handle hash-create-handle! hashq-create-handle! hashv-create-handle! hashx-create-handle! hash-map->list hash-for-each hash-for-each-handle hash-fold 
-" vectors (most of theses are duplicates of r6rs)
-syn keyword guileProc vector-length vector-ref vector-set! vector-fill! vector-copy vector-move-left! vector-move-right! 
+
 " uniform vectors
 syn match guileProc ,\%(make-\|list->\)\?[us]\%(8\|16\|32\|64\)vector\%(\%([()\[\]\";#]\|[\t\n\v\f\r ]\)\@=\|$\),
 syn match guileProc ,\%(make-\|list->\)\?[fc]\%(32\|64\)vector\%(\%([()\[\]\";#]\|[\t\n\v\f\r ]\)\@=\|$\),
 syn match guileProc ,[us]\%(8\|16\|32\|64\)vector\%(?\|-length\|-ref\|-set!\|->list\)\%(\%([()\[\]\";#]\|[\t\n\v\f\r ]\)\@=\|$\),
 syn match guileProc ,[fc]\%(32\|64\)vector\%(?\|-length\|-ref\|-set!\|->list\)\%(\%([()\[\]\";#]\|[\t\n\v\f\r ]\)\@=\|$\),
-" memory management
-syn keyword guileProc gc gc-stats make-hook hook? hook-empty? add-hook! remove-hook! reset-hook! run-hook make-weak-key-hash-table make-weak-value-hash-table make-doubly-weak-hash-table weak-key-hash-table? weak-value-hash-table? doubly-weak-hash-table? make-weak-vector weak-vector list->weak-vector weak-vector? make-guardian
+
+" arrays TODO: reader syntax extension
+syn keyword guileProc array? typed-array? make-array make-typed-array list->array array-type array-ref array-in-bounds? array-set! array-shape array-rank array->list array-copy! array-fill! array-equal? array-map! array-map-in-order! array-for-each array-index-map! uniform-array-read! uniform-array-write make-shared-array shared-array-increments shared-array-offset shared-array-root array-contents transpose-array 
+
+" vlists
+syn keyword guileProc vlist? vlist-null vlist-null? vlist-cons vlist-head vlist-tail vlist-fold vlist-fold-right vlist-ref vlist-length vlist-reverse vlist-map vlist-for-each vlist-drop vlist-take vlist-filter vlist-delete vlist-unfold vlist-append vlist-unfold-right list->vlist vlist->list
+syn keyword schemeGlobalVar block-growth-factor
+
+" records
+syn keyword guileProc record? make-record-type
+syn match guileProc ,\<record-\%(constructor\|predicate\|accessor\|modifier\|type-descriptor\|type-name\|type-fields\)\>,
+
+" structures
+syn keyword guileProc make-vtable make-struct struct? struct-ref struct-set! struct-vtable struct-vtable? vtable-index-layout vtable-index-vtable vtable-index-printer struct-vtable-name set-struct-vtable-name! struct-vtable-tag make-vtable-vtable make-struct-layout vtable-offset-user 
+
+" alists
+syn keyword guileProc acons assq-set! assv-set! assoc-set! assq assv assoc assq-ref assv-ref assoc-ref assq-remove! assv-remove! assoc-remove! sloppy-assq sloppy-assv sloppy-assoc 
+
+" vhashes
+syn keyword guileProc vhash? vhash-cons vhash-consq vhash-consv vhash-assoc vhash-assq vhash-assv vhash-delete vhash-delq vhash-delv vhash-fold vhash-fold-right vhash-fold* vhash-foldq* vhash-foldv* alist->vhash 
+
+" hash tables
+syn keyword guileProc make-hash-table hash-table? hash-clear! hash-ref hashq-ref hashv-ref hashx-ref hash-set! hashq-set! hashv-set! hashx-set! hash-remove! hashq-remove! hashv-remove! hashx-remove! hash hashq hashv hash-get-handle hashq-get-handle hashv-get-handle hashx-get-handle hash-create-handle! hashq-create-handle! hashv-create-handle! hashx-create-handle! hash-map->list hash-for-each hash-for-each-handle hash-fold 
+
+" procedures
+syn keyword guileKeyword lambda lambda* define* let-optional let-optional* let-keywords let-keywords* define*-public defmacro* defmacro*-public case-lambda
+syn keyword guileProc program? make-binding const negate compose identity
+syn match guileProc ,\<program-\%(objcode\|objects\|module\|free-variables\|meta\|bindings\|sources\|arities\|arity\)\>,
+syn match guileProc ,\<binding:\%(name\|boxed?\|index\|start\|end\)\>,
+syn match guileProc ,\<source:\%(addr\|line\|column\|file\)\>,
+syn match guileProc ,\<arity:\%(start\|end\|nreq\|nopt\|rest?\|kw\|allow-other-keys?\)\>,
+
+" macros
+syn keyword guileKeyword define-syntax let-syntax letrec-syntax syntax-rules define-syntax-rule syntax-case syntax with-syntax eval-when identifier-syntax
+syn keyword guileProc identifier? datum->syntax syntax->datum bound-identifier=? free-identifier=? generate-temporaries make-variable-transformer make-syntax-transformer macro? macro-type macro-name macro-binding macro-transformer 
+
 " utility functions
-syn keyword guileProc object->string make-object-property object-properties set-object-properties! object-property set-object-property! merge merge! sorted? sort sort! stable-sort stable-sort! restricted-vector-sort! copy-tree 
-" binding
-syn keyword guileKeyword define-once
+syn keyword guileProc eq? eqv? equal? 
+syn keyword guileProc object->string make-object-property object-properties set-object-properties! object-property set-object-property! merge merge! sorted? sort sort! stable-sort stable-sort! sort-list sort-list! restricted-vector-sort! copy-tree make-hook hook? hook-empty? add-hook! remove-hook! reset-hook! hook->list run-hook
+
+" binding constructs
+syn keyword guileKeyword define define-once let let* letrec letrec*
 syn keyword guileProc defined?
-" control
-syn keyword guileProc while break continue guileProc call-with-prompt make-prompt-tag default-prompt-tag abort-to-promp abort reset shift call-with-current-continuation call/cc values call-with-values receive catch with-throw-handler throw error scm-error strerror dynamic-wind display-error with-continuation-barrier
-syn keyword guileKeyword false-if-exception
-syn keyword schemeOperator %
-syn keyword guileErrorKey error-signal system-error numerical-overflow out-of-range wrong-type-arg wrong-number-of-args memory-allocation-error stack-overflow regular-expression-syntax misc-error
-" i/o
-syn keyword guileProc set-port-encoding! port-encoding set-port-conversion-strategy! port-conversion-strategy char-ready? unread-char unread-string drain-input port-column port-line set-port-column! set-port-line! get-print-state port-with-print-state simple-format write-char force-output flush-all-ports close-port close-input-port port-closed? seek ftell truncate-file read-line read-line! read-delimited read-delimited! write-line read-string!/partial  write-string/partial current-input-port current-output-port current-error-port set-current-input-port set-current-output-port set-current-error-port open-file open-input-file call-with-input-file call-with-output-file with-input-from-file with-error-to-file with-output-to-file port-mode port-filename set-port-filename! file-port? call-with-output-string call-with-input-string with-output-to-string with-input-from-string open-input-string open-output-string get-output-string make-soft-port %make-void-port %read-delimited! %read-line
-syn keyword schemeConstant SEEK_SET SEEK_CUR SEEK_END
-" regex
+
+" control mechanisms
+syn keyword guileKeyword begin if cond case and or do while let reset shift receive false-if-exception
+syn keyword guileOperator %
+syn keyword guileProc break continue call-with-prompt make-prompt-tag default-prompt-tag abort-to-promp abort call-with-current-continuation call/cc values call-with-values catch with-throw-handler throw error scm-error strerror dynamic-wind display-error with-continuation-barrier
+
+" input and output
+syn keyword guileProc input-port? output-port? port? set-port-encoding! port-encoding set-port-conversion-strategy! port-conversion-strategy eof-object? char-ready? read-char peek-char unread-char unread-string drain-input port-column port-line set-port-column! set-port-line! get-print-state newline port-with-print-state simple-format write-char force-output flush-all-ports close-port close-input-port close-output-port port-closed? seek ftell truncate-file read-line read-line! read-delimited read-delimited! write-line %read-delimited! %read-line read-string!/partial write-string/partial current-input-port current-output-port current-error-port set-current-input-port set-current-output-port set-current-error-port open-file open-input-file open-output-file call-with-input-file call-with-output-file with-input-from-file with-error-to-file with-output-to-file port-mode port-filename set-port-filename! file-port? call-with-output-string call-with-input-string with-output-to-string with-input-from-string open-input-string open-output-string get-output-string make-soft-port %make-void-port
+syn keyword guileGlobalVar %default-port-encoding
+syn keyword guileConstant SEEK_SET SEEK_CUR SEEK_END
+
+" regular expressions
 syn keyword guileProc string-match make-regexp regexp-exec regexp? list-matches fold-matches regexp-substitute regexp-substitute/global regexp-match? match:substring match:start match:end match:prefix match:suffix match:count match:string regexp-quote 
-syn keyword schemeConstant regexp/icase regexp/newline regexp/basic regexp/extended regexp/notbol regexp/noteol
+syn match guileConstant ,\<regexp/\%(icase\|newline\|basic\|extended\|notbol\|noteol\)\>,
+
 " lalr(1) parsing
 syn keyword guileKeyword lalr-parser
 syn keyword guileProc lexical-token-category lexical-token-source lexical-token-value make-lexical-token make-source-location source-location-column source-location-input source-location-length source-location-line source-location-offset
+
+" read/load/eval/compile
+syn keyword guileProc read-hash-extend read read-options read-enable read-disable read-set! write display print-options print-set! eval interaction-environment eval-string apply apply:nconc2last primitive-eval compile compile-file compiled-file-name load load-compiled load-from-path primitive-load primitive-load-path %search-load-path current-load-port file-encoding promise? force 
+syn keyword guileGlobalVar %auto-compilation-options current-reader %load-hook %load-extensions
+syn keyword guileKeyword delay
+
+" memory management
+syn keyword guileProc gc gc-stats gc-live-object-stats make-weak-key-hash-table make-weak-value-hash-table make-doubly-weak-hash-table weak-key-hash-table? weak-value-hash-table? doubly-weak-hash-table? make-weak-vector weak-vector list->weak-vector weak-vector? make-guardian
+syn keyword guileErrorKey error-signal system-error numerical-overflow out-of-range wrong-type-arg wrong-number-of-args memory-allocation-error stack-overflow regular-expression-syntax misc-error
+
+" modules
+syn keyword guileKeyword use-modules use-syntax define-module export define-public re-export library import
+syn keyword guileOperator @ @@ 
+syn keyword guileProc symbol-prefix-proc current-module set-current-module save-module-excursion resolve-module resolve-interface module-use! reload-module make-undefined-variable make-variable variable-bound? variable-ref variable-set! variable-unset! variable? scheme-report-environment null-environment
+
 " ffi
-syn keyword guileProc dynamic-link dynamic-object? dynamic-unlink dynamic-func dynamic-call load-extension dynamic-pointer pointer-address make-pointer pointer? null-pointer? scm->pointer pointer->scm pointer->bytevector bytevector->pointer dereference-pointer string->pointer pointer->string sizeof alignof make-c-struct parse-c-struct
+syn keyword guileProc dynamic-link dynamic-object? dynamic-unlink dynamic-func dynamic-call load-extension dynamic-pointer pointer-address make-pointer pointer? null-pointer? scm->pointer pointer->scm pointer->bytevector bytevector->pointer dereference-pointer string->pointer pointer->string sizeof alignof make-c-struct parse-c-struct pointer->procedure procedure->pointer
 syn keyword guileCType int8 uint8 uint16 int16 uint32 int32 uint64 int64 float double int unsigned-int long unsigned-long size_t void  
+syn keyword guileConstant %null-pointer
 syn keyword guileKeyword define-wrapped-pointer-type
-" syntax
-syn keyword guileProc read-hash-extend 
+
 " scheduling
 syn keyword guileProc make-arbiter try-arbiter release-arbiter system-async-mark call-with-blocked-asyncs call-with-unblocked-asyncs async async-mark run-asyncs all-threads current-thread call-with-new-thread thread? join-thread thread-exited? yield cancel-thread set-thread-cleanup! thread-cleanup make-mutex mutex? make-recursive-mutex lock-mutex try-mutex unlock-mutex mutex-owner mutex-level mutex-locked? make-condition-variable condition-variable? wait-condition-variable signal-condition-variable broadcast-condition-variable make-fluid make-unbound-fluid fluid? fluid-ref fluid-set! fluid-unset! fluid-bound? with-fluid* with-fluids* make-dynamic-state dynamic-state? current-dynamic-state set-current-dynamic-state with-dynamic-state make-future future? touch par-map par-for-each n-par-map n-par-for-each n-for-each-par-map
 syn keyword guileKeyword make-thread begin-thread with-mutex monitor with-fluids future parallel letpar
-" dynamic ffi
-syn keyword guileProc pointer->procedure procedure->pointer
+
 " options and config
 syn keyword guileProc version effective-version major-version minor-version micro-version %package-data-dir %library-dir %site-dir parse-path search-path provided? provide
-syn keyword guileGlobalVar %load-path %guile-build-info %host-type *features*
+syn keyword guileGlobalVar %load-path *features*
+syn keyword guileConstant %guile-build-info %host-type
+
 " i18n
 syn keyword guileProc make-locale locale? string-locale<? string-locale>? string-locale-ci<? string-locale-ci>? string-locale-ci=? char-locale<? char-locale>? char-locale-ci<? char-locale-ci>? char-locale-ci=? char-locale-downcase char-locale-upcase char-locale-titlecase string-locale-upcase string-locale-downcase string-locale-titlecase locale-string->integer locale-string->inexact number->locale-string monetary-amount->locale-string locale-encoding locale-day locale-day-short locale-month locale-month-short locale-am-string locale-pm-string locale-date+time-format locale-date-format locale-time-format locale-time+am/pm-format locale-era-date-format locale-era-date+time-format locale-era-time-format locale-era locale-era-year locale-decimal-point locale-thousands-separator locale-digit-grouping locale-monetary-decimal-point locale-monetary-thousands-separator locale-monetary-grouping locale-currency-symbol locale-monetary-fractional-digits locale-currency-symbol-precedes-positive? locale-currency-symbol-precedes-negative? locale-positive-separated-by-space? locale-negative-separated-by-space? locale-monetary-positive-sign locale-monetary-negative-sign locale-positive-sign-position locale-negative-sign-position locale-yes-regexp locale-no-regexp gettext ngettext textdomain bindtextdomain bind-textdomain-codeset
-syn keyword guileGlobalVar %global-locale 
-syn keyword guileSymbol parenthesize sign-before sign-after sign-before-currency-symbol sign-after-currency-symbol unspecified
+syn keyword guileConstant %global-locale 
+
+" debugging
+syn keyword guileProc make-stack stack? stack-id stack-length stack-ref display-backtrace frame? frame-previous frame-procedure frame-arguments frame-address frame-instruction-pointer frame-stack-pointer frame-dynamic-link frame-return-address frame-mv-return-address frame-num-locals frame-local-ref frame-local-set! display-application set-source-properties! set-source-property! source-properties source-property cons-source backtrace call-with-error-handling debug-options debug-enable debug-disable vm-next-hook vm-push-continuation-hook vm-pop-continuation-hook vm-apply-hook vm-abort-continuation-hook vm-restore-continuation-hook vm-trace-level set-vm-trace-level! trap-at-procedure-call trap-in-procedure trap-instructions-in-procedure trap-at-procedure-ip-in-range trap-at-source-location trap-frame-finish trap-in-dynamic-extent trap-calls-in-dynamic-extent trap-instructions-in-dynamic-extent trap-calls-to-procedure trap-matching-instructions trace-calls-to-procedure trace-calls-in-procedure trace-instructions-in-procedure call-with-trace add-trap! list-traps trap-name trap-enabled? enable-trap! disable-trap! delete-trap! with-default-trap-handler install-trap-handler! add-trap-at-procedure-call! add-trace-at-procedure-call! add-trap-at-source-location! add-ephemeral-trap-at-frame-finish! add-ephemeral-stepping-trap!
+syn keyword guileKeyword start-stack debug-set! read-set! print-set! delay
+syn keyword guileGlobalVar %auto-compilation-options current-reader %load-hook %load-extensions
+
 " code coverage
 syn keyword guileProc with-code-coverage coverage-data? coverage-data->lcov instrumented-source-files line-execution-counts instrumented/executed-lines procedure-execution-count
-" macros
-syn keyword guileKeyword define-syntax-rule syntax with-syntax eval-when identifier-syntax
-syn keyword guileProc identifier? datum->syntax syntax->datum bound-identifier=? free-identifier=? generate-temporaries make-variable-transformer make-syntax-transformer macro? macro-type macro-name macro-binding macro-transformer 
-" debugging
-syn keyword guileProc make-stack start-stack stack? stack-id stack-length stack-ref display-backtrace frame? frame-previous frame-procedure frame-arguments frame-address frame-instruction-pointer frame-stack-pointer frame-dynamic-link frame-return-address frame-mv-return-address frame-num-locals frame-local-ref frame-local-set! display-application set-source-properties! set-source-property! source-properties source-property cons-source backtrace call-with-error-handling debug-options debug-enable debug-disable vm-next-hook vm-push-continuation-hook vm-pop-continuation-hook vm-apply-hook vm-abort-continuation-hook vm-restore-continuation-hook vm-trace-level set-vm-trace-level! trap-at-procedure-call trap-in-procedure trap-instructions-in-procedure trap-at-procedure-ip-in-range trap-at-source-location trap-frame-finish trap-in-dynamic-extent trap-calls-in-dynamic-extent trap-instructions-in-dynamic-extent trap-calls-to-procedure trap-matching-instructions trace-calls-to-procedure trace-calls-in-procedure trace-instructions-in-procedure call-with-trace add-trap! list-traps trap-name trap-enabled? enable-trap! disable-trap! delete-trap! with-default-trap-handler install-trap-handler! add-trap-at-procedure-call! add-trace-at-procedure-call! add-trap-at-source-location! add-ephemeral-trap-at-frame-finish! add-ephemeral-stepping-trap!
-syn keyword guileSymbol on-error post-error trap-handler pass-keys
-syn keyword guileKeyword debug-set! 
-" read/load/eval/compile
-syn keyword guileProc read read-options read-enable read-disable write display print-options eval interaction-environment eval-string apply apply:nconc2last primitive-eval compile compile-file compiled-file-name load load-compiled load-from-path primitive-load primitive-load-path %search-load-path current-load-port file-encoding promise? force 
-syn keyword guileKeyword read-set! print-set! delay
-syn keyword guileGlobalVar %auto-compilation-options current-reader %load-hook %load-extensions
 
 
 " GUILE MODULES
@@ -459,7 +537,9 @@ syn match guileKeyword ,\<sxml-match\%(-let\*\?\)\?\>,
 
 "==============================================================================
 
-syn sync match matchPlace grouphere NONE "^[^ \t]"
+"syn sync match matchPlace grouphere NONE "^[^ \t]"
+
+syn sync fromstart
 
 " Define the default highlighting.
 " For version 5.7 and earlier: only when not done already
@@ -525,6 +605,7 @@ if version >= 508 || !exists("did_scheme_syntax_inits")
   HiLink guileConditional Conditional
   
   HiLink schemeOperator Operator
+  HiLink guileOperator Operator
   HiLink schemeException Exception
   HiLink schemeRepeat Repeat
   HiLink schemeProc Function
