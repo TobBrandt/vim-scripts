@@ -195,7 +195,8 @@ syn keyword schemeKeyword define-record-type fields mutable immutable parent pro
 syn keyword schemeProc make-record-type-descriptor record-type-descriptor? make-record-constructor-descriptor record-constructor record-predicate record-accessor record-mutator record? record-rtd record-type-name record-type-parent record-type-uid record-type-generative? record-type-sealed? record-type-opaque? record-type-field-names record-field-mutable? 
 
 " 7
-syn keyword schemeException with-exception-handler raise raise-continuable guard 
+syn keyword schemeException guard
+syn keyword schemeProc with-exception-handler raise raise-continuable
 syn keyword schemeProc condition simple-conditions condition? condition-predicate condition-accessor make-message-condition message-condition? condition-message make-warning warning? make-serious-condition serious-condition? make-error error? make-violation violation? make-assertion-violation assertion-violation? make-irritants-condition irritants-condition? condition-irritants make-who-condition who-condition? condition-who make-non-continuable-violation non-continuable-violation? make-implementation-restriction-violation implementation-restriction-violation? make-lexical-violation lexical-violation? make-syntax-violation syntax-violation? syntax-violation-form syntax-violation-subform make-undefined-violation undefined-violation? 
 syn keyword schemeCondition &condition &message &warning &serious &irritants &who  &error &violation &assertion &non-continuable &lexical &syntax &implementation-restriction &undefined
 
@@ -239,7 +240,7 @@ syn keyword schemeProc string-set! string-fill!
 
 " 19
 syn keyword schemeProc exact->inexact inexact->exact quotient remainder modulo force null-environment scheme-report-environment 
-syn keyword schemeKeyword (delay
+syn keyword schemeKeyword delay
 
 
 " READER EXTENSIONS
