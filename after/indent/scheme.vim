@@ -2,14 +2,14 @@ set lw=
 set lw+=library,define,define-syntax,lambda,set!
 set lw+=let,let*,letrec,letrec*,let-values,let*-value
 set lw+=if,cond,case
-set lw+=let-syntax,letrec-syntax,syntax-rules,when,unless,case-lambda
+set lw+=let-syntax,letrec-syntax,syntax-rules,when,unless,case-lambda,do
 set lw+=define-record-type,guard
 set lw+=with-syntax,syntax-case
 set lw+=define-enumeration
 
 set lw+=define-class,define-method,define-generic,define-accessor,class,method
-set lw+=lambda*,define*,let-optional,let-optional*,let-keywords,let-keywords*,define*-public,defmacro*,defmacro*-public
-set lw+=define-syntax-rule,eval-when
+set lw+=lambda*,define*,let-optional,let-optional*,let-keywords,let-keywords*,define*-public,defmacro*,defmacro*-public,define-inlinable
+set lw+=define-syntax-rule,eval-when,define-syntax-parameter,syntax-parameterize
 set lw+=define-once,while,shift,%,receive
 set lw+=lalr-parser
 set lw+=define-module,define-public

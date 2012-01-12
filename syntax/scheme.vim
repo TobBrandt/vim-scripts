@@ -355,15 +355,16 @@ syn keyword guileProc vhash? vhash-cons vhash-consq vhash-consv vhash-assoc vhas
 syn keyword guileProc make-hash-table hash-table? hash-clear! hash-ref hashq-ref hashv-ref hashx-ref hash-set! hashq-set! hashv-set! hashx-set! hash-remove! hashq-remove! hashv-remove! hashx-remove! hash hashq hashv hash-get-handle hashq-get-handle hashv-get-handle hashx-get-handle hash-create-handle! hashq-create-handle! hashv-create-handle! hashx-create-handle! hash-map->list hash-for-each hash-for-each-handle hash-fold 
 
 " procedures
-syn keyword guileKeyword lambda lambda* define* let-optional let-optional* let-keywords let-keywords* define*-public defmacro* defmacro*-public case-lambda
-syn keyword guileProc program? make-binding const negate compose identity
+syn keyword guileKeyword lambda lambda* define* let-optional let-optional* let-keywords let-keywords* define*-public defmacro* defmacro*-public case-lambda define-inlinable
+syn keyword guileProc program? make-binding const negate compose identity procedure? thunk? make-procedure-with-setter procedure-with-setter? procedure setter
+syn match guileProc ,\<procedure-\%(name\|source\|environment\|properties!\?\|property!\?\|documentation\)\>,
 syn match guileProc ,\<program-\%(objcode\|objects\|module\|free-variables\|meta\|bindings\|sources\|arities\|arity\)\>,
 syn match guileProc ,\<binding:\%(name\|boxed?\|index\|start\|end\)\>,
 syn match guileProc ,\<source:\%(addr\|line\|column\|file\)\>,
 syn match guileProc ,\<arity:\%(start\|end\|nreq\|nopt\|rest?\|kw\|allow-other-keys?\)\>,
 
 " macros
-syn keyword guileKeyword define-syntax let-syntax letrec-syntax syntax-rules define-syntax-rule syntax-case syntax with-syntax eval-when identifier-syntax
+syn keyword guileKeyword define-syntax let-syntax letrec-syntax syntax-rules define-syntax-rule syntax-case syntax with-syntax eval-when identifier-syntax define-syntax-parameter syntax-parameterize
 syn keyword guileProc identifier? datum->syntax syntax->datum bound-identifier=? free-identifier=? generate-temporaries make-variable-transformer make-syntax-transformer macro? macro-type macro-name macro-binding macro-transformer 
 
 " utility functions
@@ -402,7 +403,7 @@ syn keyword guileProc gc gc-stats gc-live-object-stats make-weak-key-hash-table 
 syn keyword guileErrorKey error-signal system-error numerical-overflow out-of-range wrong-type-arg wrong-number-of-args memory-allocation-error stack-overflow regular-expression-syntax misc-error
 
 " modules
-syn keyword guileKeyword use-modules use-syntax define-module export define-public re-export library import
+syn keyword guileKeyword use-modules use-syntax define-module export define-public re-export library import export!
 syn keyword guileOperator @ @@ 
 syn keyword guileProc symbol-prefix-proc current-module set-current-module save-module-excursion resolve-module resolve-interface module-use! reload-module make-undefined-variable make-variable variable-bound? variable-ref variable-set! variable-unset! variable? scheme-report-environment null-environment
 
@@ -516,7 +517,7 @@ syn keyword guileProc pretty-print truncated-print
 syn keyword guileProc format
 
 " file tree walk
-syn keyword guileProc ftw nftw
+syn keyword guileProc file-system-tree file-system-fold scandir ftw nftw
 
 " queues
 syn keyword guileProc make-q q? enq! deq! q-pop! q-push! q-length q-empty? q-empty-check q-front q-rear q-remove! sync-q!
