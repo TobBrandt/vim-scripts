@@ -271,7 +271,7 @@ syn keyword guileProc make make-instance enable-primitive-generic! primitive-gen
 " =============================================================================
 
 " booleans and numbers
-syn keyword guileProc not boolean? number? integer? real? rational? rationalize inf? nan? finite? nan inf numerator denominator complex? exact? inexact? inexact->exact exact->inexact odd? even? quotient remainder modulo gcd lcm modulo-expt exact-integer-sqrt zero? positive? negative? number->string string->number make-rectangular make-polar real-part imag-part magnitude angle 1+ 1- abs max min truncate round floor ceiling euclidean/ euclidean-quotient euclidean-remainder floor/ floor-quotient floor-remainder ceiling/ ceiling-quotient ceiling-remainder truncate/ truncate-quotient  truncate-remainder centered/ centered-quotient centered-remainder round/ round-quotient round-remainder logand logior logxor lognot logtest logbit? ash logcount integer-length integer-expt bit-extract copy-random-state seed->random-state datum->random-state random-state->datum
+syn keyword guileProc not boolean? number? integer? real? rational? rationalize inf? nan? finite? nan inf numerator denominator complex? exact? inexact? inexact->exact exact->inexact odd? even? quotient remainder modulo gcd lcm modulo-expt exact-integer-sqrt zero? positive? negative? number->string string->number make-rectangular make-polar real-part imag-part magnitude angle 1+ 1- abs max min truncate round floor ceiling euclidean/ euclidean-quotient euclidean-remainder floor/ floor-quotient floor-remainder ceiling/ ceiling-quotient ceiling-remainder truncate/ truncate-quotient  truncate-remainder centered/ centered-quotient centered-remainder round/ round-quotient round-remainder logand logior logxor lognot logtest logbit? ash logcount integer-length integer-expt bit-extract copy-random-state seed->random-state datum->random-state random-state->datum random-state-from-platform
 syn match guileProc ,\<random\%(:\%(exp\|hollow-sphere!\|normal\|normal-vector!\|solid-sphere!\|uniform\)\)\?\>,
 syn keyword guileOperator = < > <= >= + - * / sqrt expt sin cos tan asin acos atan exp log log10 sinh cosh tanh asinh acosh atanh
 syn keyword guileGlobalVar *random-state*
@@ -364,7 +364,7 @@ syn match guileProc ,\<source:\%(addr\|line\|column\|file\)\>,
 syn match guileProc ,\<arity:\%(start\|end\|nreq\|nopt\|rest?\|kw\|allow-other-keys?\)\>,
 
 " macros
-syn keyword guileKeyword define-syntax let-syntax letrec-syntax syntax-rules define-syntax-rule syntax-case syntax with-syntax eval-when identifier-syntax define-syntax-parameter syntax-parameterize
+syn keyword guileKeyword define-syntax let-syntax letrec-syntax syntax-rules define-syntax-rule syntax-case syntax with-syntax eval-when identifier-syntax define-syntax-parameter syntax-parameterize syntax-source syntax-module syntax-local-binding syntax-locally-bound-identifiers
 syn keyword guileProc identifier? datum->syntax syntax->datum bound-identifier=? free-identifier=? generate-temporaries make-variable-transformer make-syntax-transformer macro? macro-type macro-name macro-binding macro-transformer 
 
 " utility functions
@@ -394,9 +394,9 @@ syn keyword guileKeyword lalr-parser
 syn keyword guileProc lexical-token-category lexical-token-source lexical-token-value make-lexical-token make-source-location source-location-column source-location-input source-location-length source-location-line source-location-offset
 
 " read/load/eval/compile
-syn keyword guileProc read-hash-extend read read-options read-enable read-disable read-set! write display print-options print-set! eval interaction-environment eval-string apply apply:nconc2last primitive-eval compile compile-file compiled-file-name load load-compiled load-from-path primitive-load primitive-load-path %search-load-path current-load-port file-encoding promise? force 
-syn keyword guileGlobalVar %auto-compilation-options current-reader %load-hook %load-extensions
-syn keyword guileKeyword delay
+syn keyword guileProc read-hash-extend read read-options read-enable read-disable read-set! write display print-options print-set! eval interaction-environment eval-string apply apply:nconc2last primitive-eval compile compile-file compiled-file-name load load-compiled load-from-path primitive-load primitive-load-path %search-load-path current-load-port file-encoding promise? force parse-path search-path local-eval include-from-path
+syn keyword guileGlobalVar %auto-compilation-options current-reader %load-hook %load-extensions %load-path %load-compiled-path
+syn keyword guileKeyword delay add-to-load-path the-environment include
 
 " memory management
 syn keyword guileProc gc gc-stats gc-live-object-stats make-weak-key-hash-table make-weak-value-hash-table make-doubly-weak-hash-table weak-key-hash-table? weak-value-hash-table? doubly-weak-hash-table? make-weak-vector weak-vector list->weak-vector weak-vector? make-guardian
@@ -418,7 +418,7 @@ syn keyword guileProc make-arbiter try-arbiter release-arbiter system-async-mark
 syn keyword guileKeyword make-thread begin-thread with-mutex monitor with-fluids future parallel letpar
 
 " options and config
-syn keyword guileProc version effective-version major-version minor-version micro-version %package-data-dir %library-dir %site-dir parse-path search-path provided? provide
+syn keyword guileProc version effective-version major-version minor-version micro-version %package-data-dir %library-dir %site-dir provided? provide
 syn keyword guileGlobalVar %load-path *features*
 syn keyword guileConstant %guile-build-info %host-type
 
@@ -428,7 +428,7 @@ syn keyword guileConstant %global-locale
 
 " debugging
 syn keyword guileProc make-stack stack? stack-id stack-length stack-ref display-backtrace frame? frame-previous frame-procedure frame-arguments frame-address frame-instruction-pointer frame-stack-pointer frame-dynamic-link frame-return-address frame-mv-return-address frame-num-locals frame-local-ref frame-local-set! display-application set-source-properties! set-source-property! source-properties source-property cons-source backtrace call-with-error-handling debug-options debug-enable debug-disable vm-next-hook vm-push-continuation-hook vm-pop-continuation-hook vm-apply-hook vm-abort-continuation-hook vm-restore-continuation-hook vm-trace-level set-vm-trace-level! trap-at-procedure-call trap-in-procedure trap-instructions-in-procedure trap-at-procedure-ip-in-range trap-at-source-location trap-frame-finish trap-in-dynamic-extent trap-calls-in-dynamic-extent trap-instructions-in-dynamic-extent trap-calls-to-procedure trap-matching-instructions trace-calls-to-procedure trace-calls-in-procedure trace-instructions-in-procedure call-with-trace add-trap! list-traps trap-name trap-enabled? enable-trap! disable-trap! delete-trap! with-default-trap-handler install-trap-handler! add-trap-at-procedure-call! add-trace-at-procedure-call! add-trap-at-source-location! add-ephemeral-trap-at-frame-finish! add-ephemeral-stepping-trap!
-syn keyword guileKeyword start-stack debug-set! read-set! print-set! delay
+syn keyword guileKeyword start-stack debug-set! read-set! print-set! delay current-source-location current-filename
 syn keyword guileGlobalVar %auto-compilation-options current-reader %load-hook %load-extensions
 
 " code coverage
