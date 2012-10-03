@@ -1,7 +1,9 @@
 Files:
-  syntax/
-    scheme.vim      syntax highlighting for R6RS Scheme and Guile
   after/
     indent/
       scheme.vim    sets lispwords for Guile
+  colors/
+    bliss.vim       a light color scheme that's easy on the eyes
+  syntax/
+    scheme.vim      syntax highlighting for R6RS Scheme and Guile
 

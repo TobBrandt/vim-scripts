@@ -496,7 +496,7 @@ syn match guileProc ,\<time-utc->\%(date\|\%(modified-\)\?julian-day\|time-\%(mo
 
 syn match guileProc ,\<option-\%(names\|required-arg?\|optional-arg?\|processor\)\>,
 
-syn keyword guileKeyword and-let* set-record-type-printer! cut cute rec define-condition-type condition parameterize delay lazy require-extension
+syn keyword guileKeyword and-let* set-record-type-printer! cut cute rec define-condition-type parameterize delay lazy require-extension
 
 syn keyword guileGlobalVar current-input-port current-output-port current-error-port
 
@@ -568,7 +568,7 @@ if version >= 508 || !exists("did_scheme_syntax_inits")
   HiLink schemeNumericPrefix Special
   HiLink schemePolar Special
   HiLink schemeMantissaSep Special
-  HiLink schemeDelimiter Special
+  HiLink schemeDelimiter Comment
   HiLink schemeSpecialCommentR6RS Special
   HiLink schemeQuoted Special
   HiLink schemeBitvector Special
