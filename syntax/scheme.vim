@@ -106,9 +106,10 @@ syn match schemeKeyword !\%(,@\|[()\[\]#";`', \t\n\r\f\v]\)\@<=\%(,@\|[`',]\)!
 syn match schemeKeyword !#vu8!
 
 
-
 " NAMING CONVENTIONS
 " =============================================================================
+
+if exists("guile_highlight_naming_conventions")
 
 syn match schemeConstant !+\%([a-zA-Z]\|[!$%&*/:<=>?^_~]\|\\x[0-9a-fA-F][0-9a-fA-F]*;\|[0-9]\|[+-.@]\)\++\%(\%([()\[\]";#]\|[\t\n\v\f\r ]\)\@=\|$\)! 
 
@@ -120,10 +121,13 @@ syn match schemeCondition !&\%([a-zA-Z]\|[!$%&*/:<=>?^_~]\|\\x[0-9a-fA-F][0-9a-f
 
 syn match schemeLowLevel !%\%([a-zA-Z]\|[!$%&*/:<=>?^_~]\|\\x[0-9a-fA-F][0-9a-fA-F]*;\|[0-9]\|[+-.@]\)\+\%(\%([()\[\]";#]\|[\t\n\v\f\r ]\)\@=\|$\)! 
 
+endif
 
 
 " BASE LIBRARY
 " =============================================================================
+
+if exists("guile_highlight_base_library")
 
 " library syntax
 syn keyword schemeKeyword library export import rename for run expand meta only except prefix 
@@ -167,10 +171,14 @@ syn keyword schemeKeyword let-syntax letrec-syntax
 " 11.19
 syn keyword schemeKeyword syntax-rules _ ... identifier-syntax 
 
+endif
 
 
 " STANDARD LIBRARIES
 " =============================================================================
+
+if exists("guile_highlight_std_libs")
+
 " 1
 syn keyword schemeProc char-upcase char-downcase char-titlecase char-foldcase char-ci=? char-ci<? char-ci>? char-ci<=? char-ci>=? char-alphabetic? char-numeric? char-whitespace? char-upper-case? char-lower-case? char-title-case? string-upcase string-downcase string-titlecase string-foldcase string-ci=? string-ci<? string-ci>? string-ci<=? string-ci>=? string-normalize-nfd string-normalize-nfkd string-normalize-nfc string-normalize-nfkc 
 
@@ -242,9 +250,13 @@ syn keyword schemeProc string-set! string-fill!
 syn keyword schemeProc exact->inexact inexact->exact quotient remainder modulo force null-environment scheme-report-environment 
 syn keyword schemeKeyword delay
 
+endif
+
 
 " READER EXTENSIONS
 " =============================================================================
+
+if exists("guile_highlight_reader_extensions")
 
 " keyword syntax: #:foo
 syn match schemeKeyword ,#:\%(\%([a-zA-Z]\|[!$%&*/:<=>?^_~]\|\\x[0-9a-fA-F][0-9a-fA-F]*;\|[0-9]\|[+-.@]\)\%([a-zA-Z]\|[!$%&*/:<=>?^_~]\|\\x[0-9a-fA-F][0-9a-fA-F]*;\|[0-9]\|[+-.@]\)*\|[+-]\|\.\.\.\|->\%([a-zA-Z]\|[!$%&*/:<=>?^_~]\|\\x[0-9a-fA-F][0-9a-fA-F]*;\|[0-9]\|[+-.@]\)*\)\%(\%([()\[\]";#]\|[\t\n\v\f\r ]\)\@=\|$\), contains=schemeInlineHexEscape
@@ -259,16 +271,22 @@ syn match schemeDatumComment !#;[ \t\n\r\f\v]*\%(\%(#\?\%([`',]\|,@\)\)[ \t\r\n\
 syn region guileComment start=,#!\%(r6rs\)\@!, end=,!#,
 syn match schemeSpecialCommentR6RS ,#!r6rs,
 
-
+endif
 
 " GOOPS
 " =============================================================================
 
+if exists("guile_highlight_goops")
+
 syn keyword guileKeyword define-class define-method define-generic define-accessor class method 
 syn keyword guileProc make make-instance enable-primitive-generic! primitive-generic-generic next-method no-method no-applicable-method no-next-method class-name class-direct-supers class-direct-slots class-direct-subclasses class-direct-methods class-precedence-list class-slots class-subclasses class-methods class-of instance? is-a? class-slot-definition slot-definition-name slot-definition-options slot-definition-allocation slot-definition-getter slot-definition-setter slot-definition-accessor slot-definition-init-value slot-definition-init-form slot-definition-init-thunk slot-definition-init-keyword slot-init-function generic-function-name generic-function-methods method-generic-function method-specializers method-procedure method-source slot-exists? slot-bound? slot-ref slot-set! slot-exists-using-class? slot-bound-using-class? slot-ref-using-class slot-set-using-class! class-slot-ref class-slot-set! slot-missing slot-unbound goops-error shallow-clone deep-clone write display make-class ensure-metaclass compute-std-cpl make-method add-method! ensure-generic make-generic ensure-accessor make-accessor class-redefinition remove-class-accessors! update-direct-method! update-direct-subclass! change-class update-instance-for-different-class 
 
+endif
+
 " GUILE API     (many of these are duplicates of the rnrs keywords)
 " =============================================================================
+
+if exists("guile_highlight_api")
 
 " booleans and numbers
 syn keyword guileProc not boolean? number? integer? real? rational? rationalize inf? nan? finite? nan inf numerator denominator complex? exact? inexact? inexact->exact exact->inexact odd? even? quotient remainder modulo gcd lcm modulo-expt exact-integer-sqrt zero? positive? negative? number->string string->number make-rectangular make-polar real-part imag-part magnitude angle 1+ 1- abs max min truncate round floor ceiling euclidean/ euclidean-quotient euclidean-remainder floor/ floor-quotient floor-remainder ceiling/ ceiling-quotient ceiling-remainder truncate/ truncate-quotient  truncate-remainder centered/ centered-quotient centered-remainder round/ round-quotient round-remainder logand logior logxor lognot logtest logbit? ash logcount integer-length integer-expt bit-extract copy-random-state seed->random-state datum->random-state random-state->datum random-state-from-platform
@@ -434,9 +452,12 @@ syn keyword guileGlobalVar %auto-compilation-options current-reader %load-hook %
 " code coverage
 syn keyword guileProc with-code-coverage coverage-data? coverage-data->lcov instrumented-source-files line-execution-counts instrumented/executed-lines procedure-execution-count
 
+endif
 
 " GUILE MODULES
 " =============================================================================
+
+if exists("guile_highlight_modules")
 
 " POSIX
 syn keyword guileProc system-error-errno port-revealed set-port-revealed! fileno port->fdes fdopen fdes->ports fdes->inport fdes->outport primitive-move->fdes move->fdes release-port-handle fsync open open-fdes close close-fdes unread-char unread-string pipe dup->fdes dup->inport dup->outport dup dup->port duplicate-port redirect-port dup2 port-mode port-for-each setvbuf fcntl flock select  access? stat stat:dev stat:ino stat:mode stat:nlink stat:uid stat:gid stat:rdev stat:size stat:atime stat:mtime stat:ctime stat:atimensec stat:mtimensec stat:ctimensec stat:blksize stat:blocks stat:type stat:perms lstat readlink chown chmod utime delete-file copy-file rename-file link symlink mkdir rmdir opendir directory-stream? readdir rewinddir closedir sync mknod tmpnam mkstemp! tmpfile dirname basename file-exists? passwd:name passwd:passwd passwd:uid passwd:gid passwd:gecos passwd:dir passwd:shell getpwuid getpwnam setpwent getpwent endpwent setpw getpw group:name group:passwd group:gid group:mem getgrgid getgrnam setgrent getgrent endgrent setgr getgr getlogin current-time gettimeofday localtime gmtime mktime tzset strftime strptime times get-internal-real-time get-internal-run-time program-arguments command-line set-program-arguments getenv setenv unsetenv environ putenv chdir getcwd umask chroot getpid getgroups getppid getuid getgid geteuid getegid setgroups setuid setgid seteuid setegid getpgrp setpgid setsid getsid waitpid status:exit-val status:term-sig status:stop-sig system system* primitive-exit primitive-_exit execl execlp execle primitive-fork nice setpriority getpriority getaffinity setaffinity total-processor-count current-processor-count kill raise sigaction restore-signals alarm pause sleep usleep getitimer setitimer isatty? ttyname ctermid tcgetpgrp tcsetpgrp open-pipe open-pipe* open-input-pipe open-output-pipe open-input-output-pipe close-pipe inet-aton inet-ntoa inet-netof inet-lnaof inet-makeaddr inet-ntop inet-pton getaddrinfo make-socket-address socket socketpair shutdown connect bind listen accept getsockname getpeername recv! send recvfrom! sendto htons ntohs htonl ntohl uname setlocale crypt getpass
@@ -536,6 +557,8 @@ syn match guileGlobalVar ,\<expect-\%(port\|timeout\%(-proc\)\?\|eof-proc\|char-
 
 " sxml-match
 syn match guileKeyword ,\<sxml-match\%(-let\*\?\)\?\>,
+
+endif
 
 "==============================================================================
 
