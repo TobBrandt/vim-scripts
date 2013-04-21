@@ -64,7 +64,7 @@ hi Constant		guifg=#aa0000
 hi Identifier	guifg=#003270
 hi Statement	guifg=#000000 gui=bold
 hi PreProc		guifg=#000000 gui=bold
-hi Type			guifg=#006500 gui=bold
+hi Type			guifg=#006500 gui=none
 hi Special		guifg=#aa009c
 hi Underlined	guifg=#aa009c gui=underline
 hi Todo			guifg=#aa0000 guibg=#ffface
